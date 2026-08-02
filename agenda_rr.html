@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💕 RR - Nossa Agenda de Momentos</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, serif;
+    background: #fff0f5;
+    color: #4a2c40;
+    margin: 0;
+    padding: 12px;
+  }
+  h1 {
+    text-align: center;
+    color: #d63384;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+  .form-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 18px;
+  }
+  label { display: block; margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
+  input[type="text"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #f3c6d9;
+    border-radius: 6px;
+    margin-top: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 60px; }
+  .checkbox-line { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+  .checkbox-line input { width: auto; }
+  button { font-family: inherit; cursor: pointer; }
+  .btn-principal {
+    background: #ff6b9d;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .abas { display: flex; gap: 6px; margin-bottom: 12px; }
+  .aba-botao {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    background: #f0e0e8;
+    color: #4a2c40;
+    font-weight: bold;
+    font-size: 0.85rem;
+  }
+  .aba-botao.ativa { background: #d63384; color: white; }
+  .card {
+    background: #ffe4ec;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .card.passado { background: #f0e6ff; }
+  .card.semdata { background: #fff4d6; }
+  .card-topo { display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-titulo { font-weight: bold; color: #d63384; font-size: 1.05rem; }
+  .card-acoes button { background: none; border: none; font-size: 1.1rem; margin-left: 8px; }
+  .card-info { font-size: 0.88rem; margin-top: 6px; }
+  .card-nota { font-style: italic; margin-top: 6px; font-size: 0.85rem; }
+  .vazio { text-align: center; color: #999; padding: 20px; font-size: 0.9rem; }
+  .modal-fundo {
+    display: none;
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.4);
+    align-items: center; justify-content: center;
+    padding: 16px; z-index: 10;
+  }
+  .modal-fundo.ativo { display: flex; }
+  .modal-caixa {
+    background: white;
+    border-radius: 10px;
+    padding: 18px;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-botoes { display: flex; gap: 8px; margin-top: 14px; }
+  .btn-cancelar { flex: 1; background: #eee; border: none; padding: 10px; border-radius: 8px; }
+  .btn-salvar {
+    flex: 1;
+    background: #d63384;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  .status-conexao { text-align: center; font-size: 0.75rem; color: #999; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<h1>💖 RR - Nossa Agenda de Momentos Especiais 💖</h1>
+<div class="status-conexao" id="statusConexao">Conectando...</div>
+
+<div class="form-card">
+  <label>Título</label>
+  <input type="text" id="inputTitulo" placeholder="Ex: Jantar romântico">
+
+  <div class="checkbox-line">
+    <input type="checkbox" id="checkSemData">
+    <label style="margin:0;">Sem data definida ainda</label>
+  </div>
+
+  <label>Data</label>
+  <input type="date" id="inputData">
+
+  <label>Categoria</label>
+  <select id="inputCategoria">
+    <option>Aniversário</option>
+    <option>Encontro</option>
+    <option>Viagem</option>
+    <option>Presente</option>
+    <option>Aniversário de Namoro</option>
+    <option>Outro</option>
+  </select>
+
+  <label>Nota</label>
+  <textarea id="inputNota" placeholder="Escreva algo especial..."></textarea>
+
+  <button class="btn-principal" onclick="adicionarEvento()">💗 Adicionar momento</button>
+</div>
+
+<div class="abas">
+  <button class="aba-botao ativa" data-aba="futuros" onclick="trocarAba('futuros')">💌 Próximos</button>
+  <button class="aba-botao" data-aba="passados" onclick="trocarAba('passados')">📖 Memórias</button>
+  <button class="aba-botao" data-aba="semdata" onclick="trocarAba('semdata')">🗓️ Sem Data</button>
+</div>
+
+<div id="listaFuturos"></div>
+<div id="listaPassados" style="display:none;"></div>
+<div id="listaSemdata" style="display:none;"></div>
+
+<div class="modal-fundo" id="modalEditar">
+  <div class="modal-caixa">
+    <label>Título</label>
+    <input type="text" id="editTitulo">
+
+    <div class="checkbox-line">
+      <input type="checkbox" id="editSemData">
+      <label style="margin:0;">Sem data definida ainda</label>
+    </div>
+
+    <label>Data</label>
+    <input type="date" id="editData">
+
+    <label>Categoria</label>
+    <select id="editCategoria">
+      <option>Aniversário</option>
+      <option>Encontro</option>
+      <option>Viagem</option>
+      <option>Presente</option>
+      <option>Aniversário de Namoro</option>
+      <option>Outro</option>
+    </select>
+
+    <label>Nota</label>
+    <textarea id="editNota"></textarea>
+
+    <div class="modal-botoes">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarEdicao()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, onSnapshot,
+    doc, updateDoc, deleteDoc
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAp_Gw3zVM4nZrAFhLfZLgJttcNMR2QJyI",
+    authDomain: "agenda-rr.firebaseapp.com",
+    projectId: "agenda-rr",
+    storageBucket: "agenda-rr.firebasestorage.app",
+    messagingSenderId: "315478593316",
+    appId: "1:315478593316:web:8944940176b3b6756b2db1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const eventosRef = collection(db, "eventos");
+
+  let listaEventos = [];
+  let idEmEdicao = null;
+
+  document.getElementById("checkSemData").addEventListener("change", function() {
+    document.getElementById("inputData").disabled = this.checked;
+    if (this.checked) document.getElementById("inputData").value = "";
+  });
+
+  document.getElementById("editSemData").addEventListener("change", function() {
+    document.getElementById("editData").disabled = this.checked;
+    if (this.checked) document.getElementById("editData").value = "";
+  });
+
+  window.adicionarEvento = async function() {
+    const titulo = document.getElementById("inputTitulo").value.trim();
+    const semData = document.getElementById("checkSemData").checked;
+    const data = document.getElementById("inputData").value;
+    const categoria = document.getElementById("inputCategoria").value;
+    const nota = document.getElementById("inputNota").value.trim();
+
+    if (!titulo) { alert("Preencha ao menos o título."); return; }
+    if (!semData && !data) { alert("Informe a data ou marque 'Sem data definida ainda'."); return; }
+
+    await addDoc(eventosRef, {
+      titulo,
+      data: semData ? null : data,
+      categoria,
+      nota,
+      criadoEm: Date.now()
+    });
+
+    document.getElementById("inputTitulo").value = "";
+    document.getElementById("inputData").value = "";
+    document.getElementById("inputNota").value = "";
+    document.getElementById("checkSemData").checked = false;
+    document.getElementById("inputData").disabled = false;
+  };
+
+  window.excluirEvento = async function(id) {
+    if (confirm("Excluir este momento?")) {
+      await deleteDoc(doc(db, "eventos", id));
+    }
+  };
+
+  window.abrirModalEditar = function(id) {
+    const evento = listaEventos.find(e => e.id === id);
+    if (!evento) return;
+    idEmEdicao = id;
+
+    document.getElementById("editTitulo").value = evento.titulo;
+    document.getElementById("editCategoria").value = evento.categoria;
+    document.getElementById("editNota").value = evento.nota || "";
+
+    if (evento.data) {
+      document.getElementById("editSemData").checked = false;
+      document.getElementById("editData").disabled = false;
+      document.getElementById("editData").value = evento.data;
+    } else {
+      document.getElementById("editSemData").checked = true;
+      document.getElementById("editData").disabled = true;
+      document.getElementById("editData").value = "";
+    }
+
+    document.getElementById("modalEditar").classList.add("ativo");
+  };
+
+  window.fecharModal = function() {
+    document.getElementById("modalEditar").classList.remove("ativo");
+    idEmEdicao = null;
+  };
+
+  window.salvarEdicao = async function() {
+    const titulo = document.getElementById("editTitulo").value.trim();
+    const semData = document.getElementById("editSemData").checked;
+    const data = document.getElementById("editData").value;
+    const categoria = document.getElementById("editCategoria").value;
+    const nota = document.getElementById("editNota").value.trim();
+
+    if (!titulo) { alert("O título não pode ficar vazio."); return; }
+    if (!semData && !data) { alert("Informe a data ou marque 'Sem data definida ainda'."); return; }
+
+    await updateDoc(doc(db, "eventos", idEmEdicao), {
+      titulo,
+      data: semData ? null : data,
+      categoria,
+      nota
+    });
+
+    fecharModal();
+  };
+
+  window.trocarAba = function(nome) {
+    document.querySelectorAll(".aba-botao").forEach(btn => {
+      btn.classList.toggle("ativa", btn.dataset.aba === nome);
+    });
+    document.getElementById("listaFuturos").style.display = nome === "futuros" ? "block" : "none";
+    document.getElementById("listaPassados").style.display = nome === "passados" ? "block" : "none";
+    document.getElementById("listaSemdata").style.display = nome === "semdata" ? "block" : "none";
+  };
+
+  function formatarDataBR(dataISO) {
+    const [ano, mes, dia] = dataISO.split("-");
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  function renderizarListas() {
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+
+    const comData = listaEventos.filter(e => e.data);
+    const semData = listaEventos.filter(e => !e.data);
+
+    comData.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+    const futuros = comData.filter(e => new Date(e.data + "T00:00:00") >= hoje);
+    const passados = comData.filter(e => new Date(e.data + "T00:00:00") < hoje);
+
+    const containerFuturos = document.getElementById("listaFuturos");
+    const containerPassados = document.getElementById("listaPassados");
+    const containerSemdata = document.getElementById("listaSemdata");
+
+    containerFuturos.innerHTML = "";
+    containerPassados.innerHTML = "";
+    containerSemdata.innerHTML = "";
+
+    if (futuros.length === 0) {
+      containerFuturos.innerHTML = '<div class="vazio">Nenhum momento futuro cadastrado ainda 💭</div>';
+    } else {
+      futuros.forEach(e => {
+        const dataEvento = new Date(e.data + "T00:00:00");
+        const dias = Math.round((dataEvento - hoje) / (1000*60*60*24));
+        const subtitulo = dias === 0 ? "Hoje! 🎉" : `Faltam ${dias} dia(s)`;
+        containerFuturos.appendChild(criarCard(e, subtitulo, ""));
+      });
+    }
+
+    if (passados.length === 0) {
+      containerPassados.innerHTML = '<div class="vazio">Ainda não há memórias registradas 📷</div>';
+    } else {
+      passados.slice().reverse().forEach(e => {
+        const dataEvento = new Date(e.data + "T00:00:00");
+        const dias = Math.round((hoje - dataEvento) / (1000*60*60*24));
+        containerPassados.appendChild(criarCard(e, `Há ${dias} dia(s)`, "passado"));
+      });
+    }
+
+    if (semData.length === 0) {
+      containerSemdata.innerHTML = '<div class="vazio">Nenhum evento sem data no momento 🗓️</div>';
+    } else {
+      semData.forEach(e => {
+        containerSemdata.appendChild(criarCard(e, "Data a definir", "semdata"));
+      });
+    }
+  }
+
+  function criarCard(evento, subtitulo, classeExtra) {
+    const card = document.createElement("div");
+    card.className = "card " + classeExtra;
+
+    const textoData = evento.data ? formatarDataBR(evento.data) : "Data ainda não definida";
+    const notaHtml = evento.nota ? `<div class="card-nota">💬 ${evento.nota}</div>` : "";
+
+    card.innerHTML = `
+      <div class="card-topo">
+        <div class="card-titulo">${evento.titulo} (${evento.categoria})</div>
+        <div class="card-acoes">
+          <button onclick="abrirModalEditar('${evento.id}')">✏️</button>
+          <button onclick="excluirEvento('${evento.id}')">✖</button>
+        </div>
+      </div>
+      <div class="card-info">📅 ${textoData} • ${subtitulo}</div>
+      ${notaHtml}
+    `;
+    return card;
+  }
+
+  onSnapshot(eventosRef, (snapshot) => {
+    listaEventos = [];
+    snapshot.forEach(docSnap => {
+      listaEventos.push({ id: docSnap.id, ...docSnap.data() });
+    });
+    document.getElementById("statusConexao").textContent = "✅ Sincronizado";
+    renderizarListas();
+  }, (erro) => {
+    document.getElementById("statusConexao").textContent = "⚠️ Sem conexão com a nuvem";
+    console.error(erro);
+  });
+</script>
+</body>
+</html>
