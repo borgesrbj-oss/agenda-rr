@@ -36,7 +36,7 @@
     font-size: 1rem;
     font-family: inherit;
   }
-  textarea { resize: vertical; min-height: 90px; }
+  textarea { resize: vertical; min-height: 70px; }
   .checkbox-line { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
   .checkbox-line input { width: auto; }
   button { font-family: inherit; cursor: pointer; }
@@ -51,6 +51,71 @@
     width: 100%;
     margin-top: 14px;
   }
+
+  /* Calendário */
+  .calendario-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 18px;
+  }
+  .calendario-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .calendario-topo button {
+    background: #ffe4ec;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 1rem;
+    color: #d63384;
+    font-weight: bold;
+  }
+  .calendario-mes {
+    font-weight: bold;
+    color: #d63384;
+    font-size: 1.05rem;
+  }
+  .calendario-grade {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+  }
+  .calendario-dow {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #999;
+    padding-bottom: 4px;
+  }
+  .calendario-dia {
+    position: relative;
+    padding: 6px 2px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    min-height: 34px;
+    background: #fdf6f8;
+  }
+  .calendario-dia.vazio { background: transparent; }
+  .calendario-dia.hoje { border: 1px solid #d63384; }
+  .calendario-coracao {
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 2px;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+  .calendario-qtd {
+    font-size: 0.6rem;
+    color: #d63384;
+    font-weight: bold;
+  }
+
   .abas { display: flex; gap: 6px; margin-bottom: 12px; }
   .aba-botao {
     flex: 1;
@@ -69,22 +134,25 @@
     padding: 14px;
     margin-bottom: 10px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    transition: box-shadow 0.3s, background 0.3s;
   }
   .card.passado { background: #f0e6ff; }
   .card.semdata { background: #fff4d6; }
+  .card.destacado { box-shadow: 0 0 0 3px #d63384; }
   .card-topo { display: flex; justify-content: space-between; align-items: flex-start; }
   .card-titulo { font-weight: bold; color: #d63384; font-size: 1.05rem; }
   .card-acoes button { background: none; border: none; font-size: 1.1rem; margin-left: 8px; }
   .card-info { font-size: 0.88rem; margin-top: 6px; }
-  .card-nota {
+  .card-nota, .card-expectativa {
     font-style: italic;
     margin-top: 8px;
     font-size: 0.85rem;
-    background: rgba(255,255,255,0.5);
     padding: 8px;
     border-radius: 6px;
     white-space: pre-wrap;
   }
+  .card-nota { background: rgba(255,255,255,0.5); }
+  .card-expectativa { background: rgba(255,240,200,0.6); }
   .vazio { text-align: center; color: #999; padding: 20px; font-size: 0.9rem; }
   .modal-fundo {
     display: none;
@@ -123,6 +191,15 @@
 <h1>💖 RR - Nossa Agenda de Momentos Especiais 💖</h1>
 <div class="status-conexao" id="statusConexao">Conectando...</div>
 
+<div class="calendario-card">
+  <div class="calendario-topo">
+    <button onclick="mudarMes(-1)">◀</button>
+    <div class="calendario-mes" id="calendarioMesAno"></div>
+    <button onclick="mudarMes(1)">▶</button>
+  </div>
+  <div class="calendario-grade" id="calendarioGrade"></div>
+</div>
+
 <div class="form-card">
   <label>Título</label>
   <input type="text" id="inputTitulo" placeholder="Ex: Jantar romântico">
@@ -145,6 +222,9 @@
     <option value="Aniversário de Namoro">
     <option value="Outro">
   </datalist>
+
+  <label>Observações / Expectativas</label>
+  <textarea id="inputExpectativa" placeholder="O que você espera desse momento? Alguma observação importante?"></textarea>
 
   <button class="btn-principal" onclick="adicionarEvento()">💗 Adicionar momento</button>
 </div>
@@ -175,6 +255,9 @@
 
     <label>Categoria</label>
     <input type="text" id="editCategoria" list="listaCategorias">
+
+    <label>Observações / Expectativas</label>
+    <textarea id="editExpectativa"></textarea>
 
     <div class="modal-botoes">
       <button class="btn-cancelar" onclick="fecharModalEditar()">Cancelar</button>
@@ -219,6 +302,11 @@
   let listaEventos = [];
   let idEmEdicao = null;
   let idMemoriaAtual = null;
+  let mesAtual = new Date().getMonth();
+  let anoAtual = new Date().getFullYear();
+
+  const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+  const nomesDow = ["D","S","T","Q","Q","S","S"];
 
   document.getElementById("checkSemData").addEventListener("change", function() {
     document.getElementById("inputData").disabled = this.checked;
@@ -235,6 +323,7 @@
     const semData = document.getElementById("checkSemData").checked;
     const data = document.getElementById("inputData").value;
     const categoria = document.getElementById("inputCategoria").value.trim() || "Outro";
+    const expectativa = document.getElementById("inputExpectativa").value.trim();
 
     if (!titulo) { alert("Preencha ao menos o título."); return; }
     if (!semData && !data) { alert("Informe a data ou marque 'Sem data definida ainda'."); return; }
@@ -244,12 +333,14 @@
       data: semData ? null : data,
       categoria,
       nota: "",
+      expectativa,
       criadoEm: Date.now()
     });
 
     document.getElementById("inputTitulo").value = "";
     document.getElementById("inputData").value = "";
     document.getElementById("inputCategoria").value = "";
+    document.getElementById("inputExpectativa").value = "";
     document.getElementById("checkSemData").checked = false;
     document.getElementById("inputData").disabled = false;
   };
@@ -267,6 +358,7 @@
 
     document.getElementById("editTitulo").value = evento.titulo;
     document.getElementById("editCategoria").value = evento.categoria;
+    document.getElementById("editExpectativa").value = evento.expectativa || "";
 
     if (evento.data) {
       document.getElementById("editSemData").checked = false;
@@ -291,6 +383,7 @@
     const semData = document.getElementById("editSemData").checked;
     const data = document.getElementById("editData").value;
     const categoria = document.getElementById("editCategoria").value.trim() || "Outro";
+    const expectativa = document.getElementById("editExpectativa").value.trim();
 
     if (!titulo) { alert("O título não pode ficar vazio."); return; }
     if (!semData && !data) { alert("Informe a data ou marque 'Sem data definida ainda'."); return; }
@@ -298,7 +391,8 @@
     await updateDoc(doc(db, "eventos", idEmEdicao), {
       titulo,
       data: semData ? null : data,
-      categoria
+      categoria,
+      expectativa
     });
 
     fecharModalEditar();
@@ -332,9 +426,83 @@
     document.getElementById("listaSemdata").style.display = nome === "semdata" ? "block" : "none";
   };
 
+  window.mudarMes = function(delta) {
+    mesAtual += delta;
+    if (mesAtual > 11) { mesAtual = 0; anoAtual++; }
+    if (mesAtual < 0) { mesAtual = 11; anoAtual--; }
+    renderizarCalendario();
+  };
+
+  window.irParaEvento = function(id, dataISO) {
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+    const dataEvento = new Date(dataISO + "T00:00:00");
+    const aba = dataEvento >= hoje ? "futuros" : "passados";
+    trocarAba(aba);
+
+    setTimeout(() => {
+      const card = document.getElementById("evento-" + id);
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        card.classList.add("destacado");
+        setTimeout(() => card.classList.remove("destacado"), 2000);
+      }
+    }, 100);
+  };
+
   function formatarDataBR(dataISO) {
     const [ano, mes, dia] = dataISO.split("-");
     return `${dia}/${mes}/${ano}`;
+  }
+
+  function renderizarCalendario() {
+    document.getElementById("calendarioMesAno").textContent = `${nomesMeses[mesAtual]} ${anoAtual}`;
+    const grade = document.getElementById("calendarioGrade");
+    grade.innerHTML = "";
+
+    nomesDow.forEach(d => {
+      const el = document.createElement("div");
+      el.className = "calendario-dow";
+      el.textContent = d;
+      grade.appendChild(el);
+    });
+
+    const primeiroDiaSemana = new Date(anoAtual, mesAtual, 1).getDay();
+    const totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
+
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+
+    for (let i = 0; i < primeiroDiaSemana; i++) {
+      const vazio = document.createElement("div");
+      vazio.className = "calendario-dia vazio";
+      grade.appendChild(vazio);
+    }
+
+    for (let dia = 1; dia <= totalDias; dia++) {
+      const dataISO = `${anoAtual}-${String(mesAtual+1).padStart(2,"0")}-${String(dia).padStart(2,"0")}`;
+      const eventosDoDia = listaEventos.filter(e => e.data === dataISO);
+
+      const celula = document.createElement("div");
+      celula.className = "calendario-dia";
+
+      const dataCelula = new Date(anoAtual, mesAtual, dia);
+      dataCelula.setHours(0,0,0,0);
+      if (dataCelula.getTime() === hoje.getTime()) celula.classList.add("hoje");
+
+      let conteudo = `<div>${dia}</div>`;
+
+      if (eventosDoDia.length > 0) {
+        const primeiroId = eventosDoDia[0].id;
+        conteudo += `<button class="calendario-coracao" onclick="irParaEvento('${primeiroId}','${dataISO}')">💗</button>`;
+        if (eventosDoDia.length > 1) {
+          conteudo += `<div class="calendario-qtd">+${eventosDoDia.length - 1}</div>`;
+        }
+      }
+
+      celula.innerHTML = conteudo;
+      grade.appendChild(celula);
+    }
   }
 
   function renderizarListas() {
@@ -390,11 +558,14 @@
   function criarCard(evento, subtitulo, classeExtra) {
     const card = document.createElement("div");
     card.className = "card " + classeExtra;
+    card.id = "evento-" + evento.id;
 
     const textoData = evento.data ? formatarDataBR(evento.data) : "Data ainda não definida";
     const temNota = evento.nota && evento.nota.trim().length > 0;
     const iconeMemoria = temNota ? "📖" : "📝";
     const notaHtml = temNota ? `<div class="card-nota">💬 ${evento.nota}</div>` : "";
+    const temExpectativa = evento.expectativa && evento.expectativa.trim().length > 0;
+    const expectativaHtml = temExpectativa ? `<div class="card-expectativa">💭 ${evento.expectativa}</div>` : "";
 
     card.innerHTML = `
       <div class="card-topo">
@@ -406,6 +577,7 @@
         </div>
       </div>
       <div class="card-info">📅 ${textoData} • ${subtitulo}</div>
+      ${expectativaHtml}
       ${notaHtml}
     `;
     return card;
@@ -417,11 +589,14 @@
       listaEventos.push({ id: docSnap.id, ...docSnap.data() });
     });
     document.getElementById("statusConexao").textContent = "✅ Sincronizado";
+    renderizarCalendario();
     renderizarListas();
   }, (erro) => {
     document.getElementById("statusConexao").textContent = "⚠️ Sem conexão com a nuvem";
     console.error(erro);
   });
+
+  renderizarCalendario();
 </script>
 </body>
 </html>
