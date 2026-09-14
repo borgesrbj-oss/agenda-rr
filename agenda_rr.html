@@ -190,7 +190,15 @@
   .card-topo { display: flex; justify-content: space-between; align-items: flex-start; }
   .card-titulo { font-weight: bold; color: #c2185b; font-size: 1.05rem; }
   .card-acoes button { background: none; border: none; font-size: 1.1rem; margin-left: 8px; }
-  .card-info { font-size: 0.88rem; margin-top: 6px; }
+  .card-info { font-size: 0.88rem; margin-top: 6px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .btn-google-agenda {
+    background: #eef0ff;
+    color: #3949ab;
+    border: 1px solid #c5cae9;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+  }
   .card-nota, .card-expectativa {
     font-style: italic;
     margin-top: 8px;
@@ -475,6 +483,38 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  window.adicionarAoGoogleAgenda = function(id) {
+    const evento = listaEventos.find(e => e.id === id);
+    if (!evento || !evento.data) return;
+
+    // Formato de data para "dia inteiro": YYYYMMDD/YYYYMMDD (fim exclusivo, soma 1 dia)
+    const [ano, mes, dia] = evento.data.split("-").map(Number);
+    const dataInicio = new Date(ano, mes - 1, dia);
+    const dataFim = new Date(ano, mes - 1, dia + 1);
+
+    const formatarYYYYMMDD = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${y}${m}${dd}`;
+    };
+
+    const datas = `${formatarYYYYMMDD(dataInicio)}/${formatarYYYYMMDD(dataFim)}`;
+
+    let detalhes = `Categoria: ${evento.categoria || "Outro"}`;
+    if (evento.expectativa && evento.expectativa.trim().length > 0) {
+      detalhes += `\n\nObservações/Expectativas: ${evento.expectativa}`;
+    }
+
+    const url = new URL("https://calendar.google.com/calendar/render");
+    url.searchParams.set("action", "TEMPLATE");
+    url.searchParams.set("text", evento.titulo);
+    url.searchParams.set("dates", datas);
+    url.searchParams.set("details", detalhes);
+
+    window.open(url.toString(), "_blank");
   };
 
   window.adicionarEvento = async function() {
@@ -856,6 +896,9 @@
     const iconeMemoria = memorias.length > 0 ? "📖" : "📝";
     const memoriasHtml = renderizarMemoriasHtml(evento);
     const expectativaHtml = renderizarExpectativaHtml(evento);
+    const botaoGoogleAgenda = evento.data
+      ? `<button class="btn-google-agenda" onclick="adicionarAoGoogleAgenda('${evento.id}')">📅 Google Agenda</button>`
+      : "";
 
     card.innerHTML = `
       <div class="card-topo">
@@ -866,7 +909,10 @@
           <button title="Excluir evento" onclick="excluirEvento('${evento.id}')">✖</button>
         </div>
       </div>
-      <div class="card-info">📅 ${textoData} • ${subtitulo}</div>
+      <div class="card-info">
+        <span>📅 ${textoData} • ${subtitulo}</span>
+        ${botaoGoogleAgenda}
+      </div>
       ${expectativaHtml}
       ${memoriasHtml}
     `;
