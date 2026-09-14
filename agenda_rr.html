@@ -17,8 +17,21 @@
     text-align: center;
     color: #d63384;
     font-size: 1.4rem;
-    margin-bottom: 16px;
+    margin-bottom: 6px;
   }
+  .usuario-badge {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #d63384;
+    background: #ffe4ec;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin: 0 auto 12px auto;
+    cursor: pointer;
+    width: fit-content;
+  }
+  .usuario-badge-wrap { text-align: center; }
   .form-card {
     background: #ffffff;
     border-radius: 10px;
@@ -152,6 +165,8 @@
     white-space: pre-wrap;
   }
   .card-nota { background: rgba(255,255,255,0.5); }
+  .card-nota strong { font-style: normal; color: #d63384; }
+  .card-nota-data { font-size: 0.7rem; color: #999; font-style: normal; }
   .card-expectativa { background: rgba(255,240,200,0.6); }
   .vazio { text-align: center; color: #999; padding: 20px; font-size: 0.9rem; }
   .modal-fundo {
@@ -189,6 +204,9 @@
 <body>
 
 <h1>💖 RR - Nossa Agenda de Momentos Especiais 💖</h1>
+<div class="usuario-badge-wrap">
+  <span class="usuario-badge" id="usuarioBadge" onclick="trocarUsuario()">👤 ...</span>
+</div>
 <div class="status-conexao" id="statusConexao">Conectando...</div>
 
 <div class="calendario-card">
@@ -268,13 +286,23 @@
 
 <div class="modal-fundo" id="modalMemoria">
   <div class="modal-caixa">
-    <div class="modal-titulo">📝 Memória deste momento</div>
+    <div class="modal-titulo">📝 Nova memória deste momento</div>
     <label>Escreva sua memória</label>
     <textarea id="memoriaTexto" placeholder="Conte como foi esse momento..."></textarea>
 
     <div class="modal-botoes">
       <button class="btn-cancelar" onclick="fecharModalMemoria()">Cancelar</button>
       <button class="btn-salvar" onclick="salvarMemoria()">💾 Salvar memória</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-fundo" id="modalUsuario">
+  <div class="modal-caixa">
+    <div class="modal-titulo">Quem é você? 💕</div>
+    <div class="modal-botoes">
+      <button class="btn-salvar" onclick="escolherUsuario('Ricardo')">Ricardo</button>
+      <button class="btn-salvar" onclick="escolherUsuario('Renata')">Renata</button>
     </div>
   </div>
 </div>
@@ -304,6 +332,7 @@
   let idMemoriaAtual = null;
   let mesAtual = new Date().getMonth();
   let anoAtual = new Date().getFullYear();
+  let usuarioAtual = localStorage.getItem("usuarioRR");
 
   const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
   const nomesDow = ["D","S","T","Q","Q","S","S"];
@@ -317,6 +346,29 @@
     document.getElementById("editData").disabled = this.checked;
     if (this.checked) document.getElementById("editData").value = "";
   });
+
+  function verificarUsuario() {
+    if (!usuarioAtual) {
+      document.getElementById("modalUsuario").classList.add("ativo");
+    } else {
+      atualizarBadgeUsuario();
+    }
+  }
+
+  function atualizarBadgeUsuario() {
+    document.getElementById("usuarioBadge").textContent = `👤 ${usuarioAtual} (trocar)`;
+  }
+
+  window.escolherUsuario = function(nome) {
+    usuarioAtual = nome;
+    localStorage.setItem("usuarioRR", nome);
+    document.getElementById("modalUsuario").classList.remove("ativo");
+    atualizarBadgeUsuario();
+  };
+
+  window.trocarUsuario = function() {
+    document.getElementById("modalUsuario").classList.add("ativo");
+  };
 
   window.adicionarEvento = async function() {
     const titulo = document.getElementById("inputTitulo").value.trim();
@@ -332,7 +384,7 @@
       titulo,
       data: semData ? null : data,
       categoria,
-      nota: "",
+      memorias: [],
       expectativa,
       criadoEm: Date.now()
     });
@@ -399,10 +451,8 @@
   };
 
   window.abrirModalMemoria = function(id) {
-    const evento = listaEventos.find(e => e.id === id);
-    if (!evento) return;
     idMemoriaAtual = id;
-    document.getElementById("memoriaTexto").value = evento.nota || "";
+    document.getElementById("memoriaTexto").value = "";
     document.getElementById("modalMemoria").classList.add("ativo");
   };
 
@@ -412,8 +462,31 @@
   };
 
   window.salvarMemoria = async function() {
-    const nota = document.getElementById("memoriaTexto").value.trim();
-    await updateDoc(doc(db, "eventos", idMemoriaAtual), { nota });
+    const texto = document.getElementById("memoriaTexto").value.trim();
+    if (!texto) { alert("Escreva algo antes de salvar."); return; }
+
+    const evento = listaEventos.find(e => e.id === idMemoriaAtual);
+    if (!evento) return;
+
+    let memorias = evento.memorias ? [...evento.memorias] : [];
+
+    // Migração: se existir uma nota no formato antigo e ainda não migrada
+    if (memorias.length === 0 && evento.nota && evento.nota.trim().length > 0) {
+      memorias.push({
+        texto: evento.nota,
+        autor: "Memória antiga",
+        criadoEm: evento.criadoEm || Date.now()
+      });
+    }
+
+    memorias.push({
+      texto,
+      autor: usuarioAtual || "Alguém",
+      criadoEm: Date.now()
+    });
+
+    await updateDoc(doc(db, "eventos", idMemoriaAtual), { memorias, nota: "" });
+
     fecharModalMemoria();
   };
 
@@ -453,6 +526,12 @@
   function formatarDataBR(dataISO) {
     const [ano, mes, dia] = dataISO.split("-");
     return `${dia}/${mes}/${ano}`;
+  }
+
+  function formatarDataHoraBR(timestamp) {
+    if (!timestamp) return "";
+    const d = new Date(timestamp);
+    return d.toLocaleDateString("pt-BR");
   }
 
   function renderizarCalendario() {
@@ -555,15 +634,37 @@
     }
   }
 
+  function obterMemorias(evento) {
+    let memorias = evento.memorias || [];
+    if (memorias.length === 0 && evento.nota && evento.nota.trim().length > 0) {
+      memorias = [{ texto: evento.nota, autor: "Memória antiga", criadoEm: evento.criadoEm }];
+    }
+    return memorias;
+  }
+
+  function renderizarMemoriasHtml(evento) {
+    const memorias = obterMemorias(evento);
+    if (memorias.length === 0) return "";
+
+    return memorias.map(m => {
+      const autor = m.autor || "Alguém";
+      const dataTxt = formatarDataHoraBR(m.criadoEm);
+      return `<div class="card-nota">
+                💬 <strong>${autor} adicionou uma memória</strong>${dataTxt ? `<span class="card-nota-data"> — ${dataTxt}</span>` : ""}<br>
+                ${m.texto}
+              </div>`;
+    }).join("");
+  }
+
   function criarCard(evento, subtitulo, classeExtra) {
     const card = document.createElement("div");
     card.className = "card " + classeExtra;
     card.id = "evento-" + evento.id;
 
     const textoData = evento.data ? formatarDataBR(evento.data) : "Data ainda não definida";
-    const temNota = evento.nota && evento.nota.trim().length > 0;
-    const iconeMemoria = temNota ? "📖" : "📝";
-    const notaHtml = temNota ? `<div class="card-nota">💬 ${evento.nota}</div>` : "";
+    const memorias = obterMemorias(evento);
+    const iconeMemoria = memorias.length > 0 ? "📖" : "📝";
+    const memoriasHtml = renderizarMemoriasHtml(evento);
     const temExpectativa = evento.expectativa && evento.expectativa.trim().length > 0;
     const expectativaHtml = temExpectativa ? `<div class="card-expectativa">💭 ${evento.expectativa}</div>` : "";
 
@@ -571,14 +672,14 @@
       <div class="card-topo">
         <div class="card-titulo">${evento.titulo} (${evento.categoria})</div>
         <div class="card-acoes">
-          <button title="Memória" onclick="abrirModalMemoria('${evento.id}')">${iconeMemoria}</button>
+          <button title="Adicionar memória" onclick="abrirModalMemoria('${evento.id}')">${iconeMemoria}</button>
           <button title="Editar" onclick="abrirModalEditar('${evento.id}')">✏️</button>
           <button title="Excluir" onclick="excluirEvento('${evento.id}')">✖</button>
         </div>
       </div>
       <div class="card-info">📅 ${textoData} • ${subtitulo}</div>
       ${expectativaHtml}
-      ${notaHtml}
+      ${memoriasHtml}
     `;
     return card;
   }
@@ -596,6 +697,7 @@
     console.error(erro);
   });
 
+  verificarUsuario();
   renderizarCalendario();
 </script>
 </body>
