@@ -8,22 +8,22 @@
   * { box-sizing: border-box; }
   body {
     font-family: Georgia, serif;
-    background: #fffaf5;
-    color: #4a2c40;
+    background: #fdfbf9;
+    color: #5c4a56;
     margin: 0;
     padding: 12px;
   }
   h1 {
     text-align: center;
-    color: #c2185b;
+    color: #d391a8;
     font-size: 1.4rem;
     margin-bottom: 6px;
   }
   .usuario-badge-wrap { text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 12px; }
   .usuario-badge {
     font-size: 0.75rem;
-    color: #a8722f;
-    background: #f7ead2;
+    color: #b08968;
+    background: #f6ecdf;
     display: inline-block;
     padding: 4px 10px;
     border-radius: 12px;
@@ -31,8 +31,8 @@
   }
   .btn-sair {
     font-size: 0.75rem;
-    color: #a33;
-    background: #fde6e6;
+    color: #b57676;
+    background: #f8ebeb;
     border: none;
     padding: 4px 10px;
     border-radius: 12px;
@@ -46,46 +46,47 @@
   }
   .login-caixa {
     background: #ffffff;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 24px;
     width: 100%;
     max-width: 360px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    border: 1px solid #f7dde8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #f2e4ea;
   }
-  .login-titulo { text-align: center; color: #c2185b; font-weight: bold; font-size: 1.2rem; margin-bottom: 16px; }
-  .login-erro { color: #b33; font-size: 0.85rem; margin-top: 8px; text-align: center; }
+  .login-titulo { text-align: center; color: #d391a8; font-weight: bold; font-size: 1.2rem; margin-bottom: 16px; }
+  .login-erro { color: #b57676; font-size: 0.85rem; margin-top: 8px; text-align: center; }
 
   .conteudo-app { display: none; }
 
   .form-card {
     background: #ffffff;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     margin-bottom: 18px;
-    border: 1px solid #f7dde8;
+    border: 1px solid #f2e4ea;
   }
-  label { display: block; margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
+  label { display: block; margin-top: 10px; font-size: 0.9rem; font-weight: bold; color: #7a6270; }
   input[type="text"], input[type="date"], input[type="email"], input[type="password"], select, textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #f0c9dc;
-    border-radius: 6px;
+    border: 1px solid #ecd9e3;
+    border-radius: 8px;
     margin-top: 4px;
     font-size: 1rem;
     font-family: inherit;
+    background: #fffdfc;
   }
   textarea { resize: vertical; min-height: 70px; }
   .checkbox-line { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
   .checkbox-line input { width: auto; }
   button { font-family: inherit; cursor: pointer; }
   .btn-principal {
-    background: #c2185b;
+    background: #e0a3b8;
     color: white;
     border: none;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1rem;
     font-weight: bold;
     width: 100%;
@@ -94,22 +95,22 @@
   .btn-exportar {
     display: block;
     margin: 0 auto 16px auto;
-    background: #a8722f;
+    background: #c9ab8b;
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 0.8rem;
   }
 
   /* Calendário */
   .calendario-card {
     background: #ffffff;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     margin-bottom: 18px;
-    border: 1px solid #f7dde8;
+    border: 1px solid #f2e4ea;
   }
   .calendario-topo {
     display: flex;
@@ -118,17 +119,17 @@
     margin-bottom: 10px;
   }
   .calendario-topo button {
-    background: #fbe0ec;
+    background: #fbeef3;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 6px 12px;
     font-size: 1rem;
-    color: #c2185b;
+    color: #d391a8;
     font-weight: bold;
   }
   .calendario-mes {
     font-weight: bold;
-    color: #c2185b;
+    color: #d391a8;
     font-size: 1.05rem;
   }
   .calendario-grade {
@@ -140,19 +141,19 @@
   .calendario-dow {
     font-size: 0.7rem;
     font-weight: bold;
-    color: #b98ca0;
+    color: #cbb4c1;
     padding-bottom: 4px;
   }
   .calendario-dia {
     position: relative;
     padding: 6px 2px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.8rem;
     min-height: 34px;
-    background: #fdf3f7;
+    background: #fdf7f9;
   }
   .calendario-dia.vazio { background: transparent; }
-  .calendario-dia.hoje { border: 1px solid #c2185b; }
+  .calendario-dia.hoje { border: 1px solid #d391a8; }
   .calendario-coracao {
     display: block;
     font-size: 0.9rem;
@@ -163,7 +164,7 @@
   }
   .calendario-qtd {
     font-size: 0.6rem;
-    color: #c2185b;
+    color: #d391a8;
     font-weight: bold;
   }
 
@@ -172,21 +173,21 @@
     flex: 1;
     padding: 10px;
     border: none;
-    border-radius: 8px 8px 0 0;
-    background: #f5e5ec;
-    color: #4a2c40;
+    border-radius: 10px 10px 0 0;
+    background: #f8eef2;
+    color: #5c4a56;
     font-weight: bold;
     font-size: 0.85rem;
   }
-  .aba-botao.ativa { background: #c2185b; color: white; }
+  .aba-botao.ativa { background: #e0a3b8; color: white; }
 
   .lembrete-banner {
     display: none;
-    background: #fff1c2;
-    border: 1px solid #e6c760;
-    color: #7a5c00;
+    background: #fdf3d9;
+    border: 1px solid #eddba8;
+    color: #9c7c3d;
     padding: 10px 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 0.85rem;
     text-align: center;
     margin-bottom: 14px;
@@ -196,31 +197,39 @@
   .ajuda-link-wrap { text-align: center; margin-bottom: 12px; }
   .ajuda-link {
     font-size: 0.75rem;
-    color: #a8869a;
+    color: #c3aebc;
     text-decoration: underline;
     cursor: pointer;
   }
 
   .card {
-    background: #f8d7e3;
-    border-radius: 10px;
+    background: #fbe9ef;
+    border-radius: 12px;
     padding: 14px;
     margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     transition: box-shadow 0.3s, background 0.3s;
   }
-  .card.passado { background: #e6def7; }
-  .card.semdata { background: #fde6cf; }
-  .card.destacado { box-shadow: 0 0 0 3px #c2185b; }
+  .card.passado { background: #eee8f8; }
+  .card.semdata { background: #fbeee0; }
+  .card.destacado { box-shadow: 0 0 0 3px #e0a3b8; }
   .card-topo { display: flex; justify-content: space-between; align-items: flex-start; }
-  .card-titulo { font-weight: bold; color: #c2185b; font-size: 1.05rem; }
+  .card-titulo { font-weight: bold; color: #d391a8; font-size: 1.05rem; }
   .card-acoes button { background: none; border: none; font-size: 1.1rem; margin-left: 8px; }
   .card-info { font-size: 0.88rem; margin-top: 6px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
   .btn-google-agenda {
-    background: #eef0ff;
-    color: #3949ab;
-    border: 1px solid #c5cae9;
-    border-radius: 6px;
+    background: #eef1fb;
+    color: #6b7bb8;
+    border: 1px solid #d8ddf2;
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+  }
+  .btn-apple-agenda {
+    background: #f1f1f1;
+    color: #6b6b6b;
+    border: 1px solid #dfdfdf;
+    border-radius: 8px;
     padding: 3px 8px;
     font-size: 0.75rem;
   }
@@ -229,10 +238,10 @@
     margin-top: 8px;
     font-size: 0.85rem;
     padding: 8px;
-    border-radius: 6px;
+    border-radius: 8px;
     white-space: pre-wrap;
   }
-  .card-nota { background: rgba(255,255,255,0.6); }
+  .card-nota { background: rgba(255,255,255,0.65); }
   .card-nota-topo, .card-expectativa-topo {
     display: flex;
     justify-content: space-between;
@@ -240,8 +249,8 @@
     gap: 6px;
     font-style: normal;
   }
-  .card-nota strong { font-style: normal; color: #a8305e; }
-  .card-nota-data { font-size: 0.7rem; color: #999; font-style: normal; }
+  .card-nota strong { font-style: normal; color: #c17d99; }
+  .card-nota-data { font-size: 0.7rem; color: #b3a3ac; font-style: normal; }
   .btn-excluir-memoria, .btn-excluir-expectativa, .btn-editar-memoria {
     background: none;
     border: none;
@@ -249,50 +258,50 @@
     flex-shrink: 0;
     padding: 0 0 0 6px;
   }
-  .btn-excluir-memoria, .btn-excluir-expectativa { color: #b33; }
-  .btn-editar-memoria { color: #7a5c00; }
-  .card-expectativa { background: rgba(255,255,255,0.55); }
-  .vazio { text-align: center; color: #999; padding: 20px; font-size: 0.9rem; }
+  .btn-excluir-memoria, .btn-excluir-expectativa { color: #c98888; }
+  .btn-editar-memoria { color: #b3944f; }
+  .card-expectativa { background: rgba(255,255,255,0.6); }
+  .vazio { text-align: center; color: #b3a3ac; padding: 20px; font-size: 0.9rem; }
   .modal-fundo {
     display: none;
     position: fixed; top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.35);
     align-items: center; justify-content: center;
     padding: 16px; z-index: 10;
   }
   .modal-fundo.ativo { display: flex; }
   .modal-caixa {
     background: white;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 18px;
     width: 100%;
     max-width: 420px;
     max-height: 90vh;
     overflow-y: auto;
   }
-  .modal-titulo { font-weight: bold; color: #c2185b; margin-bottom: 10px; font-size: 1.05rem; }
-  .modal-texto { font-size: 0.88rem; line-height: 1.5; margin-top: 8px; }
+  .modal-titulo { font-weight: bold; color: #d391a8; margin-bottom: 10px; font-size: 1.05rem; }
+  .modal-texto { font-size: 0.88rem; line-height: 1.5; margin-top: 8px; color: #7a6270; }
   .modal-aviso {
-    background: #fff0f0;
-    border: 1px solid #f3b3b3;
-    color: #a33;
+    background: #fbf0f0;
+    border: 1px solid #edcccc;
+    color: #b57676;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.82rem;
     margin-top: 10px;
   }
   .modal-botoes { display: flex; gap: 8px; margin-top: 14px; }
-  .btn-cancelar { flex: 1; background: #eee; border: none; padding: 10px; border-radius: 8px; }
+  .btn-cancelar { flex: 1; background: #f2eeee; border: none; padding: 10px; border-radius: 10px; }
   .btn-salvar {
     flex: 1;
-    background: #c2185b;
+    background: #e0a3b8;
     color: white;
     border: none;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: bold;
   }
-  .status-conexao { text-align: center; font-size: 0.75rem; color: #999; margin-bottom: 8px; }
+  .status-conexao { text-align: center; font-size: 0.75rem; color: #c3aebc; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -456,7 +465,6 @@
   const db = getFirestore(app);
   const eventosRef = collection(db, "eventos");
 
-  // Mapeamento de e-mail cadastrado -> nome de exibição
   const nomesPorEmail = {
     "ricardo@agendarr.com": "Ricardo",
     "renata@agendarr.com": "Renata"
@@ -465,7 +473,7 @@
   let listaEventos = [];
   let idEmEdicao = null;
   let idMemoriaAtual = null;
-  let indexMemoriaAtual = null; // null = nova memória, número = editando existente
+  let indexMemoriaAtual = null;
   let mesAtual = new Date().getMonth();
   let anoAtual = new Date().getFullYear();
   let usuarioAtual = null;
@@ -526,7 +534,7 @@
   });
 
   function iniciarSincronizacao() {
-    if (desinscreverEventos) return; // já está ouvindo
+    if (desinscreverEventos) return;
     desinscreverEventos = onSnapshot(eventosRef, (snapshot) => {
       listaEventos = [];
       snapshot.forEach(docSnap => {
@@ -564,6 +572,21 @@
     URL.revokeObjectURL(url);
   };
 
+  function montarDetalhesEvento(evento) {
+    let detalhes = `Categoria: ${evento.categoria || "Outro"}`;
+    if (evento.expectativa && evento.expectativa.trim().length > 0) {
+      detalhes += `\n\nObservações/Expectativas: ${evento.expectativa}`;
+    }
+    return detalhes;
+  }
+
+  function formatarYYYYMMDD(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${y}${m}${dd}`;
+  }
+
   window.adicionarAoGoogleAgenda = function(id) {
     const evento = listaEventos.find(e => e.id === id);
     if (!evento || !evento.data) return;
@@ -572,19 +595,8 @@
     const dataInicio = new Date(ano, mes - 1, dia);
     const dataFim = new Date(ano, mes - 1, dia + 1);
 
-    const formatarYYYYMMDD = (d) => {
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      return `${y}${m}${dd}`;
-    };
-
     const datas = `${formatarYYYYMMDD(dataInicio)}/${formatarYYYYMMDD(dataFim)}`;
-
-    let detalhes = `Categoria: ${evento.categoria || "Outro"}`;
-    if (evento.expectativa && evento.expectativa.trim().length > 0) {
-      detalhes += `\n\nObservações/Expectativas: ${evento.expectativa}`;
-    }
+    const detalhes = montarDetalhesEvento(evento);
 
     const url = new URL("https://calendar.google.com/calendar/render");
     url.searchParams.set("action", "TEMPLATE");
@@ -593,6 +605,45 @@
     url.searchParams.set("details", detalhes);
 
     window.open(url.toString(), "_blank");
+  };
+
+  window.adicionarAoAppleAgenda = function(id) {
+    const evento = listaEventos.find(e => e.id === id);
+    if (!evento || !evento.data) return;
+
+    const [ano, mes, dia] = evento.data.split("-").map(Number);
+    const dataInicio = new Date(ano, mes - 1, dia);
+    const dataFim = new Date(ano, mes - 1, dia + 1);
+
+    const detalhes = montarDetalhesEvento(evento).replace(/\n/g, "\\n");
+    const uid = `${evento.id}@agenda-rr`;
+    const agora = formatarYYYYMMDD(new Date());
+
+    const conteudoIcs = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Agenda RR//PT-BR",
+      "CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      `UID:${uid}`,
+      `DTSTAMP:${agora}T000000Z`,
+      `DTSTART;VALUE=DATE:${formatarYYYYMMDD(dataInicio)}`,
+      `DTEND;VALUE=DATE:${formatarYYYYMMDD(dataFim)}`,
+      `SUMMARY:${evento.titulo}`,
+      `DESCRIPTION:${detalhes}`,
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([conteudoIcs], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${evento.titulo.replace(/[^a-zA-Z0-9]/g, "_")}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   window.adicionarEvento = async function() {
@@ -972,8 +1023,9 @@
     const iconeMemoria = memorias.length > 0 ? "📖" : "📝";
     const memoriasHtml = renderizarMemoriasHtml(evento);
     const expectativaHtml = renderizarExpectativaHtml(evento);
-    const botaoGoogleAgenda = evento.data
-      ? `<button class="btn-google-agenda" onclick="adicionarAoGoogleAgenda('${evento.id}')">📅 Google Agenda</button>`
+    const botoesAgenda = evento.data
+      ? `<button class="btn-google-agenda" onclick="adicionarAoGoogleAgenda('${evento.id}')">📅 Google Agenda</button>
+         <button class="btn-apple-agenda" onclick="adicionarAoAppleAgenda('${evento.id}')">🍎 Apple Calendário</button>`
       : "";
 
     card.innerHTML = `
@@ -987,7 +1039,7 @@
       </div>
       <div class="card-info">
         <span>📅 ${textoData} • ${subtitulo}</span>
-        ${botaoGoogleAgenda}
+        ${botoesAgenda}
       </div>
       ${expectativaHtml}
       ${memoriasHtml}
