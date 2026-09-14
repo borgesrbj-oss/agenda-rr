@@ -174,7 +174,7 @@
     white-space: pre-wrap;
   }
   .card-nota { background: rgba(255,255,255,0.5); }
-  .card-nota-topo {
+  .card-nota-topo, .card-expectativa-topo {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -183,7 +183,7 @@
   }
   .card-nota strong { font-style: normal; color: #d63384; }
   .card-nota-data { font-size: 0.7rem; color: #999; font-style: normal; }
-  .btn-excluir-memoria {
+  .btn-excluir-memoria, .btn-excluir-expectativa {
     background: none;
     border: none;
     font-size: 0.85rem;
@@ -288,7 +288,7 @@
 </div>
 
 <div class="ajuda-link-wrap">
-  <span class="ajuda-link" onclick="abrirModalAjuda()">❓ Sobre apagar memórias</span>
+  <span class="ajuda-link" onclick="abrirModalAjuda()">❓ Sobre apagar memórias e observações</span>
 </div>
 
 <div id="listaFuturos"></div>
@@ -347,12 +347,12 @@
 
 <div class="modal-fundo" id="modalAjudaMemoria">
   <div class="modal-caixa">
-    <div class="modal-titulo">❓ Sobre apagar memórias</div>
+    <div class="modal-titulo">❓ Sobre apagar memórias e observações</div>
     <div class="modal-texto">
-      Cada memória adicionada a um evento fica salva com o nome de quem escreveu e a data. Use a opção de apagar (🗑️) quando quiser remover uma memória que foi escrita por engano, duplicada, ou que vocês dois decidiram não manter registrada.
+      Cada evento pode ter dois tipos de texto: as <strong>Observações/Expectativas</strong> (💭), escritas na criação do evento, e as <strong>Memórias</strong> (💬), adicionadas depois pelo ícone 📝/📖, cada uma com o nome de quem escreveu e a data. Use a lixeira (🗑️) quando quiser remover um desses textos por engano, duplicidade, ou porque vocês decidiram não manter aquele registro.
     </div>
     <div class="modal-aviso">
-      ⚠️ Atenção: essa ação é permanente e não pode ser desfeita. A memória é removida da nuvem para os dois usuários (Ricardo e Renata), não apenas do seu aparelho. Antes de apagar, vale conversar com a outra pessoa caso a memória tenha sido escrita por ela.
+      ⚠️ Atenção: apagar é permanente e não pode ser desfeito. O texto é removido da nuvem para os dois usuários (Ricardo e Renata), não apenas do seu aparelho. Vale conversar antes de apagar algo escrito pela outra pessoa.
     </div>
     <div class="modal-botoes">
       <button class="btn-salvar" onclick="fecharModalAjuda()">Entendi</button>
@@ -568,6 +568,13 @@
     await updateDoc(doc(db, "eventos", id), { memorias });
   };
 
+  window.excluirExpectativa = async function(id) {
+    const confirmMsg = "Tem certeza que deseja apagar esta observação/expectativa?\n\nEssa ação é permanente e não pode ser desfeita. O texto será removido definitivamente do sistema, para os dois usuários.";
+    if (!confirm(confirmMsg)) return;
+
+    await updateDoc(doc(db, "eventos", id), { expectativa: "" });
+  };
+
   window.trocarAba = function(nome) {
     document.querySelectorAll(".aba-botao").forEach(btn => {
       btn.classList.toggle("ativa", btn.dataset.aba === nome);
@@ -738,6 +745,19 @@
     }).join("");
   }
 
+  function renderizarExpectativaHtml(evento) {
+    const temExpectativa = evento.expectativa && evento.expectativa.trim().length > 0;
+    if (!temExpectativa) return "";
+
+    return `<div class="card-expectativa">
+              <div class="card-expectativa-topo">
+                <span>💭 <strong>Observação / Expectativa</strong></span>
+                <button class="btn-excluir-expectativa" title="Apagar observação" onclick="excluirExpectativa('${evento.id}')">🗑️</button>
+              </div>
+              <div>${evento.expectativa}</div>
+            </div>`;
+  }
+
   function criarCard(evento, subtitulo, classeExtra) {
     const card = document.createElement("div");
     card.className = "card " + classeExtra;
@@ -747,8 +767,7 @@
     const memorias = obterMemorias(evento);
     const iconeMemoria = memorias.length > 0 ? "📖" : "📝";
     const memoriasHtml = renderizarMemoriasHtml(evento);
-    const temExpectativa = evento.expectativa && evento.expectativa.trim().length > 0;
-    const expectativaHtml = temExpectativa ? `<div class="card-expectativa">💭 ${evento.expectativa}</div>` : "";
+    const expectativaHtml = renderizarExpectativaHtml(evento);
 
     card.innerHTML = `
       <div class="card-topo">
