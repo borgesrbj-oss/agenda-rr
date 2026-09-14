@@ -8,22 +8,22 @@
   * { box-sizing: border-box; }
   body {
     font-family: Georgia, serif;
-    background: #fff0f5;
+    background: #fffaf5;
     color: #4a2c40;
     margin: 0;
     padding: 12px;
   }
   h1 {
     text-align: center;
-    color: #d63384;
+    color: #c2185b;
     font-size: 1.4rem;
     margin-bottom: 6px;
   }
   .usuario-badge {
     text-align: center;
     font-size: 0.75rem;
-    color: #d63384;
-    background: #ffe4ec;
+    color: #a8722f;
+    background: #f7ead2;
     display: inline-block;
     padding: 4px 10px;
     border-radius: 12px;
@@ -32,18 +32,33 @@
     width: fit-content;
   }
   .usuario-badge-wrap { text-align: center; }
+
+  .lembrete-banner {
+    display: none;
+    background: #fff1c2;
+    border: 1px solid #e6c760;
+    color: #7a5c00;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .lembrete-banner.ativo { display: block; }
+
   .form-card {
     background: #ffffff;
     border-radius: 10px;
     padding: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     margin-bottom: 18px;
+    border: 1px solid #f7dde8;
   }
   label { display: block; margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
   input[type="text"], input[type="date"], select, textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #f3c6d9;
+    border: 1px solid #f0c9dc;
     border-radius: 6px;
     margin-top: 4px;
     font-size: 1rem;
@@ -54,7 +69,7 @@
   .checkbox-line input { width: auto; }
   button { font-family: inherit; cursor: pointer; }
   .btn-principal {
-    background: #ff6b9d;
+    background: #c2185b;
     color: white;
     border: none;
     padding: 12px;
@@ -64,14 +79,25 @@
     width: 100%;
     margin-top: 14px;
   }
+  .btn-exportar {
+    display: block;
+    margin: 0 auto 16px auto;
+    background: #a8722f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+  }
 
   /* Calendário */
   .calendario-card {
     background: #ffffff;
     border-radius: 10px;
     padding: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     margin-bottom: 18px;
+    border: 1px solid #f7dde8;
   }
   .calendario-topo {
     display: flex;
@@ -80,17 +106,17 @@
     margin-bottom: 10px;
   }
   .calendario-topo button {
-    background: #ffe4ec;
+    background: #fbe0ec;
     border: none;
     border-radius: 6px;
     padding: 6px 12px;
     font-size: 1rem;
-    color: #d63384;
+    color: #c2185b;
     font-weight: bold;
   }
   .calendario-mes {
     font-weight: bold;
-    color: #d63384;
+    color: #c2185b;
     font-size: 1.05rem;
   }
   .calendario-grade {
@@ -102,7 +128,7 @@
   .calendario-dow {
     font-size: 0.7rem;
     font-weight: bold;
-    color: #999;
+    color: #b98ca0;
     padding-bottom: 4px;
   }
   .calendario-dia {
@@ -111,10 +137,10 @@
     border-radius: 6px;
     font-size: 0.8rem;
     min-height: 34px;
-    background: #fdf6f8;
+    background: #fdf3f7;
   }
   .calendario-dia.vazio { background: transparent; }
-  .calendario-dia.hoje { border: 1px solid #d63384; }
+  .calendario-dia.hoje { border: 1px solid #c2185b; }
   .calendario-coracao {
     display: block;
     font-size: 0.9rem;
@@ -125,7 +151,7 @@
   }
   .calendario-qtd {
     font-size: 0.6rem;
-    color: #d63384;
+    color: #c2185b;
     font-weight: bold;
   }
 
@@ -135,34 +161,34 @@
     padding: 10px;
     border: none;
     border-radius: 8px 8px 0 0;
-    background: #f0e0e8;
+    background: #f5e5ec;
     color: #4a2c40;
     font-weight: bold;
     font-size: 0.85rem;
   }
-  .aba-botao.ativa { background: #d63384; color: white; }
+  .aba-botao.ativa { background: #c2185b; color: white; }
 
   .ajuda-link-wrap { text-align: center; margin-bottom: 12px; }
   .ajuda-link {
     font-size: 0.75rem;
-    color: #999;
+    color: #a8869a;
     text-decoration: underline;
     cursor: pointer;
   }
 
   .card {
-    background: #ffe4ec;
+    background: #f8d7e3;
     border-radius: 10px;
     padding: 14px;
     margin-bottom: 10px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     transition: box-shadow 0.3s, background 0.3s;
   }
-  .card.passado { background: #f0e6ff; }
-  .card.semdata { background: #fff4d6; }
-  .card.destacado { box-shadow: 0 0 0 3px #d63384; }
+  .card.passado { background: #e6def7; }
+  .card.semdata { background: #fde6cf; }
+  .card.destacado { box-shadow: 0 0 0 3px #c2185b; }
   .card-topo { display: flex; justify-content: space-between; align-items: flex-start; }
-  .card-titulo { font-weight: bold; color: #d63384; font-size: 1.05rem; }
+  .card-titulo { font-weight: bold; color: #c2185b; font-size: 1.05rem; }
   .card-acoes button { background: none; border: none; font-size: 1.1rem; margin-left: 8px; }
   .card-info { font-size: 0.88rem; margin-top: 6px; }
   .card-nota, .card-expectativa {
@@ -173,7 +199,7 @@
     border-radius: 6px;
     white-space: pre-wrap;
   }
-  .card-nota { background: rgba(255,255,255,0.5); }
+  .card-nota { background: rgba(255,255,255,0.6); }
   .card-nota-topo, .card-expectativa-topo {
     display: flex;
     justify-content: space-between;
@@ -181,17 +207,18 @@
     gap: 6px;
     font-style: normal;
   }
-  .card-nota strong { font-style: normal; color: #d63384; }
+  .card-nota strong { font-style: normal; color: #a8305e; }
   .card-nota-data { font-size: 0.7rem; color: #999; font-style: normal; }
-  .btn-excluir-memoria, .btn-excluir-expectativa {
+  .btn-excluir-memoria, .btn-excluir-expectativa, .btn-editar-memoria {
     background: none;
     border: none;
     font-size: 0.85rem;
-    color: #b33;
     flex-shrink: 0;
     padding: 0 0 0 6px;
   }
-  .card-expectativa { background: rgba(255,240,200,0.6); }
+  .btn-excluir-memoria, .btn-excluir-expectativa { color: #b33; }
+  .btn-editar-memoria { color: #7a5c00; }
+  .card-expectativa { background: rgba(255,255,255,0.55); }
   .vazio { text-align: center; color: #999; padding: 20px; font-size: 0.9rem; }
   .modal-fundo {
     display: none;
@@ -210,7 +237,7 @@
     max-height: 90vh;
     overflow-y: auto;
   }
-  .modal-titulo { font-weight: bold; color: #d63384; margin-bottom: 10px; font-size: 1.05rem; }
+  .modal-titulo { font-weight: bold; color: #c2185b; margin-bottom: 10px; font-size: 1.05rem; }
   .modal-texto { font-size: 0.88rem; line-height: 1.5; margin-top: 8px; }
   .modal-aviso {
     background: #fff0f0;
@@ -225,7 +252,7 @@
   .btn-cancelar { flex: 1; background: #eee; border: none; padding: 10px; border-radius: 8px; }
   .btn-salvar {
     flex: 1;
-    background: #d63384;
+    background: #c2185b;
     color: white;
     border: none;
     padding: 10px;
@@ -242,6 +269,8 @@
   <span class="usuario-badge" id="usuarioBadge" onclick="trocarUsuario()">👤 ...</span>
 </div>
 <div class="status-conexao" id="statusConexao">Conectando...</div>
+
+<div class="lembrete-banner" id="lembreteBanner"></div>
 
 <div class="calendario-card">
   <div class="calendario-topo">
@@ -280,6 +309,8 @@
 
   <button class="btn-principal" onclick="adicionarEvento()">💗 Adicionar momento</button>
 </div>
+
+<button class="btn-exportar" onclick="exportarBackup()">⬇️ Exportar backup</button>
 
 <div class="abas">
   <button class="aba-botao ativa" data-aba="futuros" onclick="trocarAba('futuros')">💌 Próximos</button>
@@ -324,7 +355,7 @@
 
 <div class="modal-fundo" id="modalMemoria">
   <div class="modal-caixa">
-    <div class="modal-titulo">📝 Nova memória deste momento</div>
+    <div class="modal-titulo" id="tituloModalMemoria">📝 Nova memória deste momento</div>
     <label>Escreva sua memória</label>
     <textarea id="memoriaTexto" placeholder="Conte como foi esse momento..."></textarea>
 
@@ -349,10 +380,10 @@
   <div class="modal-caixa">
     <div class="modal-titulo">❓ Sobre apagar memórias e observações</div>
     <div class="modal-texto">
-      Cada evento pode ter dois tipos de texto: as <strong>Observações/Expectativas</strong> (💭), escritas na criação do evento, e as <strong>Memórias</strong> (💬), adicionadas depois pelo ícone 📝/📖, cada uma com o nome de quem escreveu e a data. Use a lixeira (🗑️) quando quiser remover um desses textos por engano, duplicidade, ou porque vocês decidiram não manter aquele registro.
+      Cada evento pode ter dois tipos de texto: as <strong>Observações/Expectativas</strong> (💭), escritas na criação do evento, e as <strong>Memórias</strong> (💬), adicionadas depois, cada uma com o nome de quem escreveu e a data. Use o lápis (✏️) para corrigir uma memória, e a lixeira (🗑️) quando quiser removê-la de vez.
     </div>
     <div class="modal-aviso">
-      ⚠️ Atenção: apagar é permanente e não pode ser desfeito. O texto é removido da nuvem para os dois usuários (Ricardo e Renata), não apenas do seu aparelho. Vale conversar antes de apagar algo escrito pela outra pessoa.
+      ⚠️ Atenção: apagar é permanente e não pode ser desfeito. O texto é removido da nuvem para os dois usuários. Vale conversar antes de apagar algo escrito pela outra pessoa. Use o botão "Exportar backup" de vez em quando para guardar uma cópia de segurança de tudo.
     </div>
     <div class="modal-botoes">
       <button class="btn-salvar" onclick="fecharModalAjuda()">Entendi</button>
@@ -383,6 +414,7 @@
   let listaEventos = [];
   let idEmEdicao = null;
   let idMemoriaAtual = null;
+  let indexMemoriaAtual = null; // null = nova memória, número = editando existente
   let mesAtual = new Date().getMonth();
   let anoAtual = new Date().getFullYear();
   let usuarioAtual = localStorage.getItem("usuarioRR");
@@ -429,6 +461,20 @@
 
   window.fecharModalAjuda = function() {
     document.getElementById("modalAjudaMemoria").classList.remove("ativo");
+  };
+
+  window.exportarBackup = function() {
+    const conteudo = JSON.stringify(listaEventos, null, 2);
+    const blob = new Blob([conteudo], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const dataHoje = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `backup-agenda-rr-${dataHoje}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   window.adicionarEvento = async function() {
@@ -513,13 +559,30 @@
 
   window.abrirModalMemoria = function(id) {
     idMemoriaAtual = id;
+    indexMemoriaAtual = null;
+    document.getElementById("tituloModalMemoria").textContent = "📝 Nova memória deste momento";
     document.getElementById("memoriaTexto").value = "";
+    document.getElementById("modalMemoria").classList.add("ativo");
+  };
+
+  window.abrirEditarMemoria = function(id, index) {
+    const evento = listaEventos.find(e => e.id === id);
+    if (!evento) return;
+    const memorias = obterMemorias(evento);
+    const memoria = memorias[index];
+    if (!memoria) return;
+
+    idMemoriaAtual = id;
+    indexMemoriaAtual = index;
+    document.getElementById("tituloModalMemoria").textContent = "✏️ Editar memória";
+    document.getElementById("memoriaTexto").value = memoria.texto;
     document.getElementById("modalMemoria").classList.add("ativo");
   };
 
   window.fecharModalMemoria = function() {
     document.getElementById("modalMemoria").classList.remove("ativo");
     idMemoriaAtual = null;
+    indexMemoriaAtual = null;
   };
 
   window.salvarMemoria = async function() {
@@ -529,43 +592,36 @@
     const evento = listaEventos.find(e => e.id === idMemoriaAtual);
     if (!evento) return;
 
-    let memorias = evento.memorias ? [...evento.memorias] : [];
+    let memorias = obterMemorias(evento).map(m => ({ ...m }));
 
-    // Migração: se existir uma nota no formato antigo e ainda não migrada
-    if (memorias.length === 0 && evento.nota && evento.nota.trim().length > 0) {
+    if (indexMemoriaAtual !== null) {
+      // Edição de memória existente
+      memorias[indexMemoriaAtual].texto = texto;
+      memorias[indexMemoriaAtual].editadoEm = Date.now();
+    } else {
+      // Nova memória
       memorias.push({
-        texto: evento.nota,
-        autor: "Memória antiga",
-        criadoEm: evento.criadoEm || Date.now()
+        texto,
+        autor: usuarioAtual || "Alguém",
+        criadoEm: Date.now()
       });
     }
-
-    memorias.push({
-      texto,
-      autor: usuarioAtual || "Alguém",
-      criadoEm: Date.now()
-    });
 
     await updateDoc(doc(db, "eventos", idMemoriaAtual), { memorias, nota: "" });
 
     fecharModalMemoria();
   };
 
-  window.excluirMemoria = async function(id, index, legacy) {
+  window.excluirMemoria = async function(id, index) {
     const confirmMsg = "Tem certeza que deseja apagar esta memória?\n\nEssa ação é permanente e não pode ser desfeita. O texto será removido definitivamente do sistema, para os dois usuários.";
     if (!confirm(confirmMsg)) return;
 
     const evento = listaEventos.find(e => e.id === id);
     if (!evento) return;
 
-    if (legacy) {
-      await updateDoc(doc(db, "eventos", id), { nota: "" });
-      return;
-    }
-
-    let memorias = evento.memorias ? [...evento.memorias] : [];
+    let memorias = obterMemorias(evento).map(m => ({ ...m }));
     memorias.splice(index, 1);
-    await updateDoc(doc(db, "eventos", id), { memorias });
+    await updateDoc(doc(db, "eventos", id), { memorias, nota: "" });
   };
 
   window.excluirExpectativa = async function(id) {
@@ -617,6 +673,35 @@
     if (!timestamp) return "";
     const d = new Date(timestamp);
     return d.toLocaleDateString("pt-BR");
+  }
+
+  function renderizarLembrete() {
+    const banner = document.getElementById("lembreteBanner");
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+
+    const proximos = listaEventos
+      .filter(e => e.data)
+      .map(e => {
+        const dataEvento = new Date(e.data + "T00:00:00");
+        const dias = Math.round((dataEvento - hoje) / (1000*60*60*24));
+        return { ...e, dias };
+      })
+      .filter(e => e.dias >= 0 && e.dias <= 3)
+      .sort((a, b) => a.dias - b.dias);
+
+    if (proximos.length === 0) {
+      banner.classList.remove("ativo");
+      banner.textContent = "";
+      return;
+    }
+
+    const e = proximos[0];
+    const texto = e.dias === 0
+      ? `⏰ Hoje é o dia: ${e.titulo}!`
+      : `⏰ Está chegando: ${e.titulo} em ${e.dias} dia(s)!`;
+    banner.textContent = texto;
+    banner.classList.add("ativo");
   }
 
   function renderizarCalendario() {
@@ -722,7 +807,7 @@
   function obterMemorias(evento) {
     let memorias = evento.memorias || [];
     if (memorias.length === 0 && evento.nota && evento.nota.trim().length > 0) {
-      memorias = [{ texto: evento.nota, autor: "Memória antiga", criadoEm: evento.criadoEm, legacy: true }];
+      memorias = [{ texto: evento.nota, autor: "Memória antiga", criadoEm: evento.criadoEm }];
     }
     return memorias;
   }
@@ -734,11 +819,14 @@
     return memorias.map((m, i) => {
       const autor = m.autor || "Alguém";
       const dataTxt = formatarDataHoraBR(m.criadoEm);
-      const legacyFlag = m.legacy ? "true" : "false";
+      const editadoTxt = m.editadoEm ? ` (editado)` : "";
       return `<div class="card-nota">
                 <div class="card-nota-topo">
-                  <span>💬 <strong>${autor} adicionou uma memória</strong>${dataTxt ? `<span class="card-nota-data"> — ${dataTxt}</span>` : ""}</span>
-                  <button class="btn-excluir-memoria" title="Apagar memória" onclick="excluirMemoria('${evento.id}', ${i}, ${legacyFlag})">🗑️</button>
+                  <span>💬 <strong>${autor} adicionou uma memória</strong>${dataTxt ? `<span class="card-nota-data"> — ${dataTxt}${editadoTxt}</span>` : ""}</span>
+                  <span>
+                    <button class="btn-editar-memoria" title="Editar memória" onclick="abrirEditarMemoria('${evento.id}', ${i})">✏️</button>
+                    <button class="btn-excluir-memoria" title="Apagar memória" onclick="excluirMemoria('${evento.id}', ${i})">🗑️</button>
+                  </span>
                 </div>
                 <div>${m.texto}</div>
               </div>`;
@@ -774,8 +862,8 @@
         <div class="card-titulo">${evento.titulo} (${evento.categoria})</div>
         <div class="card-acoes">
           <button title="Adicionar memória" onclick="abrirModalMemoria('${evento.id}')">${iconeMemoria}</button>
-          <button title="Editar" onclick="abrirModalEditar('${evento.id}')">✏️</button>
-          <button title="Excluir" onclick="excluirEvento('${evento.id}')">✖</button>
+          <button title="Editar evento" onclick="abrirModalEditar('${evento.id}')">✏️</button>
+          <button title="Excluir evento" onclick="excluirEvento('${evento.id}')">✖</button>
         </div>
       </div>
       <div class="card-info">📅 ${textoData} • ${subtitulo}</div>
@@ -793,6 +881,7 @@
     document.getElementById("statusConexao").textContent = "✅ Sincronizado";
     renderizarCalendario();
     renderizarListas();
+    renderizarLembrete();
   }, (erro) => {
     document.getElementById("statusConexao").textContent = "⚠️ Sem conexão com a nuvem";
     console.error(erro);
