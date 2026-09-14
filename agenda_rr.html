@@ -19,32 +19,44 @@
     font-size: 1.4rem;
     margin-bottom: 6px;
   }
+  .usuario-badge-wrap { text-align: center; display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 12px; }
   .usuario-badge {
-    text-align: center;
     font-size: 0.75rem;
     color: #a8722f;
     background: #f7ead2;
     display: inline-block;
     padding: 4px 10px;
     border-radius: 12px;
-    margin: 0 auto 12px auto;
-    cursor: pointer;
     width: fit-content;
   }
-  .usuario-badge-wrap { text-align: center; }
-
-  .lembrete-banner {
-    display: none;
-    background: #fff1c2;
-    border: 1px solid #e6c760;
-    color: #7a5c00;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    text-align: center;
-    margin-bottom: 14px;
+  .btn-sair {
+    font-size: 0.75rem;
+    color: #a33;
+    background: #fde6e6;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 12px;
   }
-  .lembrete-banner.ativo { display: block; }
+
+  .login-tela {
+    display: flex;
+    min-height: 70vh;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-caixa {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 24px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border: 1px solid #f7dde8;
+  }
+  .login-titulo { text-align: center; color: #c2185b; font-weight: bold; font-size: 1.2rem; margin-bottom: 16px; }
+  .login-erro { color: #b33; font-size: 0.85rem; margin-top: 8px; text-align: center; }
+
+  .conteudo-app { display: none; }
 
   .form-card {
     background: #ffffff;
@@ -55,7 +67,7 @@
     border: 1px solid #f7dde8;
   }
   label { display: block; margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
-  input[type="text"], input[type="date"], select, textarea {
+  input[type="text"], input[type="date"], input[type="email"], input[type="password"], select, textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #f0c9dc;
@@ -168,6 +180,19 @@
   }
   .aba-botao.ativa { background: #c2185b; color: white; }
 
+  .lembrete-banner {
+    display: none;
+    background: #fff1c2;
+    border: 1px solid #e6c760;
+    color: #7a5c00;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .lembrete-banner.ativo { display: block; }
+
   .ajuda-link-wrap { text-align: center; margin-bottom: 12px; }
   .ajuda-link {
     font-size: 0.75rem;
@@ -273,66 +298,84 @@
 <body>
 
 <h1>💖 RR - Nossa Agenda de Momentos Especiais 💖</h1>
-<div class="usuario-badge-wrap">
-  <span class="usuario-badge" id="usuarioBadge" onclick="trocarUsuario()">👤 ...</span>
-</div>
-<div class="status-conexao" id="statusConexao">Conectando...</div>
 
-<div class="lembrete-banner" id="lembreteBanner"></div>
-
-<div class="calendario-card">
-  <div class="calendario-topo">
-    <button onclick="mudarMes(-1)">◀</button>
-    <div class="calendario-mes" id="calendarioMesAno"></div>
-    <button onclick="mudarMes(1)">▶</button>
+<div id="telaLogin" class="login-tela">
+  <div class="login-caixa">
+    <div class="login-titulo">💕 Entrar na agenda</div>
+    <label>E-mail</label>
+    <input type="email" id="loginEmail" placeholder="seuemail@agendarr.com">
+    <label>Senha</label>
+    <input type="password" id="loginSenha" placeholder="Sua senha">
+    <button class="btn-principal" onclick="fazerLogin()">Entrar</button>
+    <div class="login-erro" id="loginErro"></div>
   </div>
-  <div class="calendario-grade" id="calendarioGrade"></div>
 </div>
 
-<div class="form-card">
-  <label>Título</label>
-  <input type="text" id="inputTitulo" placeholder="Ex: Jantar romântico">
+<div id="conteudoApp" class="conteudo-app">
 
-  <div class="checkbox-line">
-    <input type="checkbox" id="checkSemData">
-    <label style="margin:0;">Sem data definida ainda</label>
+  <div class="usuario-badge-wrap">
+    <span class="usuario-badge" id="usuarioBadge">👤 ...</span>
+    <button class="btn-sair" onclick="fazerLogout()">Sair</button>
+  </div>
+  <div class="status-conexao" id="statusConexao">Conectando...</div>
+
+  <div class="lembrete-banner" id="lembreteBanner"></div>
+
+  <div class="calendario-card">
+    <div class="calendario-topo">
+      <button onclick="mudarMes(-1)">◀</button>
+      <div class="calendario-mes" id="calendarioMesAno"></div>
+      <button onclick="mudarMes(1)">▶</button>
+    </div>
+    <div class="calendario-grade" id="calendarioGrade"></div>
   </div>
 
-  <label>Data</label>
-  <input type="date" id="inputData">
+  <div class="form-card">
+    <label>Título</label>
+    <input type="text" id="inputTitulo" placeholder="Ex: Jantar romântico">
 
-  <label>Categoria</label>
-  <input type="text" id="inputCategoria" list="listaCategorias" placeholder="Ex: Aniversário, Viagem...">
-  <datalist id="listaCategorias">
-    <option value="Aniversário">
-    <option value="Encontro">
-    <option value="Viagem">
-    <option value="Presente">
-    <option value="Aniversário de Namoro">
-    <option value="Outro">
-  </datalist>
+    <div class="checkbox-line">
+      <input type="checkbox" id="checkSemData">
+      <label style="margin:0;">Sem data definida ainda</label>
+    </div>
 
-  <label>Observações / Expectativas</label>
-  <textarea id="inputExpectativa" placeholder="O que você espera desse momento? Alguma observação importante?"></textarea>
+    <label>Data</label>
+    <input type="date" id="inputData">
 
-  <button class="btn-principal" onclick="adicionarEvento()">💗 Adicionar momento</button>
+    <label>Categoria</label>
+    <input type="text" id="inputCategoria" list="listaCategorias" placeholder="Ex: Aniversário, Viagem...">
+    <datalist id="listaCategorias">
+      <option value="Aniversário">
+      <option value="Encontro">
+      <option value="Viagem">
+      <option value="Presente">
+      <option value="Aniversário de Namoro">
+      <option value="Outro">
+    </datalist>
+
+    <label>Observações / Expectativas</label>
+    <textarea id="inputExpectativa" placeholder="O que você espera desse momento? Alguma observação importante?"></textarea>
+
+    <button class="btn-principal" onclick="adicionarEvento()">💗 Adicionar momento</button>
+  </div>
+
+  <button class="btn-exportar" onclick="exportarBackup()">⬇️ Exportar backup</button>
+
+  <div class="abas">
+    <button class="aba-botao ativa" data-aba="futuros" onclick="trocarAba('futuros')">💌 Próximos</button>
+    <button class="aba-botao" data-aba="passados" onclick="trocarAba('passados')">📖 Memórias</button>
+    <button class="aba-botao" data-aba="semdata" onclick="trocarAba('semdata')">🗓️ Sem Data</button>
+  </div>
+
+  <div class="ajuda-link-wrap">
+    <span class="ajuda-link" onclick="abrirModalAjuda()">❓ Sobre apagar memórias e observações</span>
+  </div>
+
+  <div id="listaFuturos"></div>
+  <div id="listaPassados" style="display:none;"></div>
+  <div id="listaSemdata" style="display:none;"></div>
+
 </div>
-
-<button class="btn-exportar" onclick="exportarBackup()">⬇️ Exportar backup</button>
-
-<div class="abas">
-  <button class="aba-botao ativa" data-aba="futuros" onclick="trocarAba('futuros')">💌 Próximos</button>
-  <button class="aba-botao" data-aba="passados" onclick="trocarAba('passados')">📖 Memórias</button>
-  <button class="aba-botao" data-aba="semdata" onclick="trocarAba('semdata')">🗓️ Sem Data</button>
-</div>
-
-<div class="ajuda-link-wrap">
-  <span class="ajuda-link" onclick="abrirModalAjuda()">❓ Sobre apagar memórias e observações</span>
-</div>
-
-<div id="listaFuturos"></div>
-<div id="listaPassados" style="display:none;"></div>
-<div id="listaSemdata" style="display:none;"></div>
 
 <div class="modal-fundo" id="modalEditar">
   <div class="modal-caixa">
@@ -374,16 +417,6 @@
   </div>
 </div>
 
-<div class="modal-fundo" id="modalUsuario">
-  <div class="modal-caixa">
-    <div class="modal-titulo">Quem é você? 💕</div>
-    <div class="modal-botoes">
-      <button class="btn-salvar" onclick="escolherUsuario('Ricardo')">Ricardo</button>
-      <button class="btn-salvar" onclick="escolherUsuario('Renata')">Renata</button>
-    </div>
-  </div>
-</div>
-
 <div class="modal-fundo" id="modalAjudaMemoria">
   <div class="modal-caixa">
     <div class="modal-titulo">❓ Sobre apagar memórias e observações</div>
@@ -402,6 +435,9 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
+    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
     getFirestore, collection, addDoc, onSnapshot,
     doc, updateDoc, deleteDoc
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -416,8 +452,15 @@
   };
 
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getFirestore(app);
   const eventosRef = collection(db, "eventos");
+
+  // Mapeamento de e-mail cadastrado -> nome de exibição
+  const nomesPorEmail = {
+    "ricardo@agendarr.com": "Ricardo",
+    "renata@agendarr.com": "Renata"
+  };
 
   let listaEventos = [];
   let idEmEdicao = null;
@@ -425,7 +468,8 @@
   let indexMemoriaAtual = null; // null = nova memória, número = editando existente
   let mesAtual = new Date().getMonth();
   let anoAtual = new Date().getFullYear();
-  let usuarioAtual = localStorage.getItem("usuarioRR");
+  let usuarioAtual = null;
+  let desinscreverEventos = null;
 
   const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
   const nomesDow = ["D","S","T","Q","Q","S","S"];
@@ -440,28 +484,63 @@
     if (this.checked) document.getElementById("editData").value = "";
   });
 
-  function verificarUsuario() {
-    if (!usuarioAtual) {
-      document.getElementById("modalUsuario").classList.add("ativo");
-    } else {
-      atualizarBadgeUsuario();
+  window.fazerLogin = async function() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const senha = document.getElementById("loginSenha").value;
+    const erroEl = document.getElementById("loginErro");
+    erroEl.textContent = "";
+
+    if (!email || !senha) {
+      erroEl.textContent = "Preencha e-mail e senha.";
+      return;
     }
-  }
 
-  function atualizarBadgeUsuario() {
-    document.getElementById("usuarioBadge").textContent = `👤 ${usuarioAtual} (trocar)`;
-  }
-
-  window.escolherUsuario = function(nome) {
-    usuarioAtual = nome;
-    localStorage.setItem("usuarioRR", nome);
-    document.getElementById("modalUsuario").classList.remove("ativo");
-    atualizarBadgeUsuario();
+    try {
+      await signInWithEmailAndPassword(auth, email, senha);
+    } catch (e) {
+      erroEl.textContent = "E-mail ou senha incorretos.";
+      console.error(e);
+    }
   };
 
-  window.trocarUsuario = function() {
-    document.getElementById("modalUsuario").classList.add("ativo");
+  window.fazerLogout = async function() {
+    await signOut(auth);
   };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioAtual = nomesPorEmail[user.email] || user.email;
+      document.getElementById("telaLogin").style.display = "none";
+      document.getElementById("conteudoApp").style.display = "block";
+      document.getElementById("usuarioBadge").textContent = `👤 ${usuarioAtual}`;
+      iniciarSincronizacao();
+    } else {
+      usuarioAtual = null;
+      if (desinscreverEventos) { desinscreverEventos(); desinscreverEventos = null; }
+      listaEventos = [];
+      document.getElementById("telaLogin").style.display = "flex";
+      document.getElementById("conteudoApp").style.display = "none";
+      document.getElementById("loginEmail").value = "";
+      document.getElementById("loginSenha").value = "";
+    }
+  });
+
+  function iniciarSincronizacao() {
+    if (desinscreverEventos) return; // já está ouvindo
+    desinscreverEventos = onSnapshot(eventosRef, (snapshot) => {
+      listaEventos = [];
+      snapshot.forEach(docSnap => {
+        listaEventos.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      document.getElementById("statusConexao").textContent = "✅ Sincronizado";
+      renderizarCalendario();
+      renderizarListas();
+      renderizarLembrete();
+    }, (erro) => {
+      document.getElementById("statusConexao").textContent = "⚠️ Sem conexão com a nuvem";
+      console.error(erro);
+    });
+  }
 
   window.abrirModalAjuda = function() {
     document.getElementById("modalAjudaMemoria").classList.add("ativo");
@@ -489,7 +568,6 @@
     const evento = listaEventos.find(e => e.id === id);
     if (!evento || !evento.data) return;
 
-    // Formato de data para "dia inteiro": YYYYMMDD/YYYYMMDD (fim exclusivo, soma 1 dia)
     const [ano, mes, dia] = evento.data.split("-").map(Number);
     const dataInicio = new Date(ano, mes - 1, dia);
     const dataFim = new Date(ano, mes - 1, dia + 1);
@@ -635,11 +713,9 @@
     let memorias = obterMemorias(evento).map(m => ({ ...m }));
 
     if (indexMemoriaAtual !== null) {
-      // Edição de memória existente
       memorias[indexMemoriaAtual].texto = texto;
       memorias[indexMemoriaAtual].editadoEm = Date.now();
     } else {
-      // Nova memória
       memorias.push({
         texto,
         autor: usuarioAtual || "Alguém",
@@ -919,21 +995,6 @@
     return card;
   }
 
-  onSnapshot(eventosRef, (snapshot) => {
-    listaEventos = [];
-    snapshot.forEach(docSnap => {
-      listaEventos.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    document.getElementById("statusConexao").textContent = "✅ Sincronizado";
-    renderizarCalendario();
-    renderizarListas();
-    renderizarLembrete();
-  }, (erro) => {
-    document.getElementById("statusConexao").textContent = "⚠️ Sem conexão com a nuvem";
-    console.error(erro);
-  });
-
-  verificarUsuario();
   renderizarCalendario();
 </script>
 </body>
